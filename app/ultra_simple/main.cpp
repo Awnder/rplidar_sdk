@@ -280,6 +280,11 @@ int main(int argc, const char * argv[]) {
                     (nodes[pos].angle_z_q14 * 90.f) / 16384.f,
                     nodes[pos].dist_mm_q2/4.0f,
                     nodes[pos].quality >> SL_LIDAR_RESP_MEASUREMENT_QUALITY_SHIFT);
+
+                // Check if the distance is within 100 mm
+                if (nodes[pos].dist_mm_q2 / 4.0f < 100.0f) {
+                    printf("close!\n");
+                }
             }
         }
 
