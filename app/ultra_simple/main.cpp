@@ -28,6 +28,9 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
+#include <iostream>
+// #include <pigpio.h> for rpi pins
+#include <chrono>
 
 #include "sl_lidar.h" 
 #include "sl_lidar_driver.h"
@@ -101,6 +104,7 @@ int main(int argc, const char * argv[]) {
     sl_u32         baudrateArray[2] = {115200, 256000};
     sl_result     op_result;
 	int          opt_channel_type = CHANNEL_TYPE_SERIALPORT;
+    const int buzzerPin = 7; // GPIO pin number for the buzzer
 
 	bool useArgcBaudrate = false;
 
@@ -258,6 +262,12 @@ int main(int argc, const char * argv[]) {
         goto on_finished;
     }
 
+    // if (gpioInitialize() < 0) {
+    //     fprintf(stderr, "Failed to initialize GPIO\n");
+    //     return -1;
+    // }
+    // gpioSetMode(buzzerPin, GPIO_OUTPUT);
+
     signal(SIGINT, ctrlc);
     
 	if(opt_channel_type == CHANNEL_TYPE_SERIALPORT)
@@ -284,6 +294,13 @@ int main(int argc, const char * argv[]) {
                 // Check if the distance is within 100 mm
                 if (nodes[pos].dist_mm_q2 / 4.0f < 100.0f) {
                     printf("close!\n");
+                    // gpioWrite(buzzerPin, 1); // Turn on the buzzer
+                    // auto start_time = std::chrono::steady_clock::now();
+                    // while (std::chrono::steady_clock::now() - start_time < std::chrono::seconds(1)) {
+                    //     // Non-blocking delay loop
+                    // }
+                    // delay(1000);
+                    // gpioWrite(buzzerPin, 0); // Turn off the buzzer
                 }
             }
         }
